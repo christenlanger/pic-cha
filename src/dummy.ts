@@ -2,6 +2,7 @@ import type { Config } from './types';
 
 export const dummyConfig: Config = {
     theme: "default",
+    timer: 5,
     gameBoard: [
         {
             category: "Category 1",

@@ -1,6 +1,10 @@
 import React from 'react';
+
 import type { GameCategoryState } from "../types";
+
 import ItemTile from "./ItemTile";
+
+import "./GameBoard.scss";
 
 type Props = {
     gameBoard: GameCategoryState[];
@@ -11,8 +15,8 @@ export default function GameBoard({ gameBoard, onHandleTileClick }: Props) {
     const maxItems: number = Math.max(0, ...gameBoard.map(cat => cat.items.length));
 
     return (
-      <section id="game-board">
-        <ul className={`grid grid-cols-${gameBoard.length + 1} gap-4`}>
+      <main id="game-board">
+        <ul style={{ gridTemplateColumns: `repeat(${gameBoard.length + 1}, minmax(0, 1fr))` }}>
           {/* Categories */}
           <li></li>
           {gameBoard.map((cat, catIdx) => (
@@ -33,6 +37,6 @@ export default function GameBoard({ gameBoard, onHandleTileClick }: Props) {
             </React.Fragment>
           ))}
         </ul>
-      </section>
+      </main>
     );
 }

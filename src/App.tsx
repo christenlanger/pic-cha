@@ -1,10 +1,14 @@
-import './App.scss'
 import { useState } from 'react';
+
 import type { GameCategory, GameCategoryState } from './types';
+
 import { ThemeContext } from './context';
 import { dummyConfig } from './dummy';
 
 import GameBoard from './components/GameBoard';
+import GamePanel from './components/GamePanel';
+
+import './App.scss'
 
 function setInitialGameBoard(gameBoard: GameCategory[]): GameCategoryState[] {
   return gameBoard.map(cat => ({
@@ -13,24 +17,32 @@ function setInitialGameBoard(gameBoard: GameCategory[]): GameCategoryState[] {
   }));
 }
 
-function App() {
+export default function App() {
   const [gameBoard, setGameBoard] = useState<GameCategoryState[]>(setInitialGameBoard(dummyConfig.gameBoard));
+  const [selectedItem, setSelectedItem] = useState<{catIdx: number, rowIdx: number} | null>(null);
 
   function handleTileClick(catIdx: number, rowIdx: number) {
-    if (!gameBoard[catIdx].items[rowIdx].isRevealed) {
+    setSelectedItem({catIdx, rowIdx});
+  }
+
+  function handleReveal() {
+    if (selectedItem && !gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx].isRevealed) {
       setGameBoard(prev => prev.map((cat, c) => ({
         category: cat.category,
-        items: cat.items.map((item, r) => ({ ...item, isRevealed: (catIdx == c && rowIdx == r ? true : item.isRevealed) }))
+        items: cat.items.map((item, r) => ({ ...item, isRevealed: (selectedItem.catIdx == c && selectedItem.rowIdx == r ? true : item.isRevealed) }))
       })));
     }
+  }
+
+  function handleClosePanel() {
+    setSelectedItem(null);
   }
 
   return (
     <ThemeContext.Provider value={`/${dummyConfig.theme}`}>
       <h1>Pic Game</h1>
       <GameBoard gameBoard={gameBoard} onHandleTileClick={handleTileClick} />
+      {selectedItem && <GamePanel item={gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx]} timer={dummyConfig.timer} onReveal={handleReveal} onClose={handleClosePanel} />}
     </ThemeContext.Provider>
   )
 }
-
-export default App
