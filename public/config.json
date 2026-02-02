@@ -1,0 +1,23 @@
+{
+    "theme": "default",
+    "gameBoard": [
+        {
+            "category": "Category 1",
+            "items": [
+                {
+                    "title": "Title 1",
+                    "imgFile": "placeholder.png"
+                }
+            ]
+        },
+        {
+            "category": "Category 2",
+            "items": [
+                {
+                    "title": "Item 1",
+                    "imgFile": "placeholder.png"
+                }
+            ]
+        }
+    ]
+}
