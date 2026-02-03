@@ -1,4 +1,16 @@
-#game-board ul {
+.gameboard-container ul {
     display: grid;
     gap: 1rem;
+    place-items: center;
+}
+
+.gameboard-container button {
+    width: 12rem;
+    height: 10rem;
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: fill;
+    }
 }

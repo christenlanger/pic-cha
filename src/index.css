@@ -1,13 +1,14 @@
-@import "tailwindcss";
-
 :root {
+  --color-bg: 35, 35, 35;
+  --color-borders: 100, 108, 255;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: rgb(var(--color-bg));
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -31,11 +32,16 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  max-width: 1920px;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+li {
+  list-style-type: none;
 }
 
 button {
@@ -51,12 +57,16 @@ button {
 }
 
 button:hover {
-  border-color: #646cff;
+  border-color: rgb(var(--color-borders));
 }
 
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+button:disabled {
+  color: rgb(var(--color-borders));
 }
 
 @media (prefers-color-scheme: light) {

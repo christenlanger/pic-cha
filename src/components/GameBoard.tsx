@@ -15,8 +15,8 @@ export default function GameBoard({ gameBoard, onHandleTileClick }: Props) {
     const maxItems: number = Math.max(0, ...gameBoard.map(cat => cat.items.length));
 
     return (
-      <main id="game-board">
-        <ul style={{ gridTemplateColumns: `repeat(${gameBoard.length + 1}, minmax(0, 1fr))` }}>
+      <main className="gameboard-container">
+        <ul style={{gridTemplateColumns: `repeat(${gameBoard.length + 1}, 1fr)`}}>
           {/* Categories */}
           <li></li>
           {gameBoard.map((cat, catIdx) => (
@@ -29,9 +29,7 @@ export default function GameBoard({ gameBoard, onHandleTileClick }: Props) {
               <li>Difficulty {rowIdx + 1}</li>
               {gameBoard.map((cat, catIdx) => (
                 <li key={`item-${catIdx}-${rowIdx}`}>
-                    {cat.items[rowIdx] !== undefined ?
-                      <ItemTile item={cat.items[rowIdx]} onClick={() => onHandleTileClick(catIdx, rowIdx)} /> :
-                      ""}
+                    {cat.items[rowIdx] && <ItemTile item={cat.items[rowIdx]} onClick={() => onHandleTileClick(catIdx, rowIdx)} />}
                 </li>
               ))}
             </React.Fragment>

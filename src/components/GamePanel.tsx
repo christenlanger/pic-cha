@@ -19,6 +19,7 @@ export default function GamePanel({ item, timer, onReveal, onClose }: Props) {
     const [imgLoaded, setImgLoaded] = useState<boolean>(false);
     const [showHint, setShowHint] = useState<boolean>(false);
     const [timerIsRunning, setTimerIsRunning] = useState<boolean>(false);
+    const [timerIsDone, setTimerIsDone] = useState<boolean>(false);
     const theme = useContext(ThemeContext);
 
     function handleImgLoad() {
@@ -31,25 +32,43 @@ export default function GamePanel({ item, timer, onReveal, onClose }: Props) {
     }
 
     function handleTimerFinish() {
+        setTimerIsRunning(false);
+        setTimerIsDone(true);
         console.log("Timer finished!");
+    }
+
+    function handleReveal() {
+        setShowHint(false);
+        onReveal();
     }
 
     if (!item) return null;
 
+    const canResumeTimer = item?.isRevealed || timerIsDone;
+    const showTimer = !(item?.isRevealed || timerIsDone);
+
     return (
-        <dialog className="game-panel">
-            <Timer max={timer} isRunning={timerIsRunning} onFinish={handleTimerFinish} />
-            {item.isRevealed && <h2>{item.title}</h2>}
-            {showHint && <p className="hint">{item.hint}</p>}
+        <dialog className="game-panel-container">
+            {showTimer && <Timer max={timer} isRunning={timerIsRunning} onFinish={handleTimerFinish} />}
 
-            <img src={`${theme}/${item.imgFile}`} onLoad={handleImgLoad} style={{ display: imgLoaded ? "inline" : "none" }} />
-            {!imgLoaded && <p>Loading...</p>}
+            <div className={`title-container ${(item.isRevealed && !showHint) && "visible"}`}>
+                <p>{item.title}</p>
+            </div>
 
-            <menu>
-                <button onClick={() => {setShowHint(true)}} disabled={showHint}>Hint</button>
-                <button onClick={onReveal} disabled={item.isRevealed}>Reveal</button>
-                <button onClick={toggleTimer} disabled={item.isRevealed}>{timerIsRunning ? "Pause" : "Resume"} Timer</button>
-                <button onClick={onClose}>Close</button>
+            <div className={`hint-container ${showHint && "visible"}`}>
+                <p className="hint">{item.hint}</p>
+            </div>
+
+            <div className="img-container">
+                <img src={`${theme}/${item.imgFile}`} onLoad={handleImgLoad} style={{ display: imgLoaded ? "inline" : "none" }} />
+                {!imgLoaded && <p>Loading...</p>}
+            </div>
+
+            <menu className="menu-container">
+                <li><button onClick={() => {setShowHint(prev => !prev)}}>Toggle Hint</button></li>
+                {!item.isRevealed && <li><button onClick={handleReveal} disabled={timerIsRunning}>Reveal</button></li>}
+                {showTimer && <li><button onClick={toggleTimer} disabled={canResumeTimer}>{timerIsRunning ? "Pause" : "Resume"} Timer</button></li>}
+                <li><button onClick={onClose}>Close</button></li>
             </menu>
         </dialog>
     );

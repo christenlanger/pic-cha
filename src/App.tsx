@@ -5,10 +5,11 @@ import type { GameCategory, GameCategoryState } from './types';
 import { ThemeContext } from './context';
 import { dummyConfig } from './dummy';
 
+import LoadCSS from './utilities/LoadCSS';
 import GameBoard from './components/GameBoard';
 import GamePanel from './components/GamePanel';
 
-import './App.scss'
+import './App.css'
 
 function setInitialGameBoard(gameBoard: GameCategory[]): GameCategoryState[] {
   return gameBoard.map(cat => ({
@@ -40,7 +41,7 @@ export default function App() {
 
   return (
     <ThemeContext.Provider value={`/${dummyConfig.theme}`}>
-      <h1>Pic Game</h1>
+      <LoadCSS />
       <GameBoard gameBoard={gameBoard} onHandleTileClick={handleTileClick} />
       {selectedItem && <GamePanel item={gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx]} timer={dummyConfig.timer} onReveal={handleReveal} onClose={handleClosePanel} />}
     </ThemeContext.Provider>

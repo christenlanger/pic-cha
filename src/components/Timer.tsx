@@ -26,7 +26,7 @@ export default function Timer({ max, isRunning, onFinish, onTrigger }: Props) {
                 // End timer
                 if (prev <= 0) {
                     clearInterval(id);
-                    if (prev !== 0) onFinish();
+                    setTimeout(() => onFinish(), 0);
                     return 0;
                 }
 
@@ -41,7 +41,7 @@ export default function Timer({ max, isRunning, onFinish, onTrigger }: Props) {
     }, [isRunning, onFinish, onTrigger]);
 
     return (
-        <div className="game-timer">
+        <div className="timer-container">
             {timeLeft}
         </div>
     );
