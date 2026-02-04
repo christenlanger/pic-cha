@@ -14,6 +14,12 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
 a {
@@ -32,7 +38,6 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  max-width: 1920px;
 }
 
 h1 {

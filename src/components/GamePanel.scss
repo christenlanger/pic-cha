@@ -1,9 +1,9 @@
 .game-panel-container {
-    width: 100dvw;
-    height: 100dvh;
-    display: flex;
+    width: 100%;
+    height: 100%;
+    display: none;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     position: absolute;
     top: 0;
@@ -11,6 +11,10 @@
     background: rgba(var(--color-bg), 0.4);
     border: none;
     padding: 0;
+
+    &.visible {
+        display: flex;
+    }
 }
 
 .title-container, .hint-container {
@@ -32,6 +36,10 @@
 }
 
 .img-container {
+    display: flex;
+    flex: 1 0 auto;
+    justify-content: center;
+    align-items: center;
     max-height: 80dvh;
 
     img {
@@ -42,8 +50,9 @@
 }
 
 .menu-container {
-    flex-basis: 5rem;
+    flex-basis: 10rem;
     display: flex;
     gap: 1rem;
     padding: 1rem;
+    margin-top: auto;
 }

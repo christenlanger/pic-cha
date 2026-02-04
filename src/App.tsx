@@ -43,7 +43,7 @@ export default function App() {
     <ThemeContext.Provider value={`/${dummyConfig.theme}`}>
       <LoadCSS />
       <GameBoard gameBoard={gameBoard} onHandleTileClick={handleTileClick} />
-      {selectedItem && <GamePanel item={gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx]} timer={dummyConfig.timer} onReveal={handleReveal} onClose={handleClosePanel} />}
+      <GamePanel item={selectedItem && gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx]} timer={dummyConfig.timer} onReveal={handleReveal} onClose={handleClosePanel} />
     </ThemeContext.Provider>
   )
 }
