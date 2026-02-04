@@ -9,10 +9,20 @@ export interface GameCategory {
     items: GameItem[];
 }
 
+export interface Trigger {
+    bgm?: string;
+    sfx?: string;
+    addClass?: string;
+}
+
 export interface Config {
     theme: string;
     timer: number;
-    gameBoard: GameCategory[];
+    delay: number;
+    bgm?: string;
+    triggers?: {
+        [key: string]: Trigger;
+    };
 }
 
 export type GameItemState = GameItem & {

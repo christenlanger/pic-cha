@@ -1,22 +1,38 @@
 {
     "theme": "default",
+    "timer": 30,
+    "delay": 1000,
+    "bgm": "audio/top.mp3",
+    "triggers": {
+        "repeat": {
+            "sfx": "audio/tick.mp3"
+        },
+        "start": {
+            "bgm": "audio/idle.mp3"
+        },
+        "10": {
+            "bgm": "audio/critical.mp3",
+            "addClass": "orange"
+        },
+        "5": {
+            "addClass": "red"
+        },
+        "end": {
+            "bgm": "off",
+            "sfx": "audio/finish.mp3"
+        }
+    },
     "gameBoard": [
         {
             "category": "Category 1",
             "items": [
-                {
-                    "title": "Title 1",
-                    "imgFile": "placeholder.png"
-                }
+                { "title": "Title 1", "imgFile": "placeholder.png" }
             ]
         },
         {
             "category": "Category 2",
             "items": [
-                {
-                    "title": "Item 1",
-                    "imgFile": "placeholder.png"
-                }
+                { "title": "Item 1", "imgFile": "placeholder.png" }
             ]
         }
     ]

@@ -1,5 +1,7 @@
 import { useEffect, useContext } from "react";
+
 import { ThemeContext } from "../context";
+import { APP_DEFAULTS } from "../constants/app";
 
 const LoadCSS = () => {
     const theme = useContext(ThemeContext);
@@ -8,7 +10,7 @@ const LoadCSS = () => {
         const link = document.createElement("link");
 
         link.rel = "stylesheet";
-        link.href = `${theme}/style.css`;
+        link.href = `${theme}/${APP_DEFAULTS.cssFileName}`;
         link.id = "theme-css";
         document.head.appendChild(link);
 
