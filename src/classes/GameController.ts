@@ -1,6 +1,4 @@
-import type { Trigger } from "../types";
-
-type Triggers = Record<string, Trigger | undefined>;
+import type { Triggers } from "../types";
 
 type GameControllerCallbacks = {
     onTick?: (timeLeft: number) => void;    // called every second
@@ -11,6 +9,7 @@ export class GameController {
     private timer: number;
     private delay: number;
     private theme: string;
+    private displayZeroDelay: number;
     private triggers: Triggers;
     private intervalId: number | null = null;
     private callbacks: GameControllerCallbacks;
@@ -18,11 +17,12 @@ export class GameController {
     private bgmAudio: HTMLAudioElement | null = null;
     private activeClasses = new Set<string>();
 
-    constructor(timer: number, delay: number, theme: string, triggers: Triggers, callbacks: GameControllerCallbacks = {}) {
+    constructor(timer: number, delay: number, theme: string, displayZeroDelay: number = 0, triggers: Triggers = {}, callbacks: GameControllerCallbacks = {}) {
         this.timer = timer;
         this.currentTime = timer;
         this.delay = delay;
         this.theme = theme;
+        this.displayZeroDelay = displayZeroDelay;
         this.triggers = triggers;
         this.callbacks = callbacks;
     }
@@ -42,16 +42,19 @@ export class GameController {
         this.callbacks.onTick?.(this.currentTime);
         this.applyTrigger("repeat");
 
-        // Check for triggers on specific secons
+        // Check for triggers on specific seconds
         this.applyTrigger(this.currentTime.toString());
 
         // On end
         if (this.currentTime <= 0) {
             this.applyTrigger("end");
             this.stop();
-            document.body.classList.remove(...this.activeClasses.values());
-            this.activeClasses.clear();
-            this.callbacks.onEnd?.();
+
+            setTimeout(() => {
+                document.body.classList.remove(...this.activeClasses.values());
+                this.activeClasses.clear();
+                this.callbacks.onEnd?.();
+            }, this.displayZeroDelay);
         }
     }
 
@@ -88,10 +91,9 @@ export class GameController {
     }
 
     stop() {
-        if (this.intervalId) {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-        }
+        if (this.intervalId === null) return;
+        clearInterval(this.intervalId);
+        this.intervalId = null;
     }
 
     reset() {

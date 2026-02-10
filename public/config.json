@@ -1,9 +1,9 @@
 {
     "theme": "default",
-    "timer": 30,
-    "delay": 1000,
+    "timer": 5,
+    "delay": 0,
     "bgm": "audio/top.mp3",
-    "triggers": {
+    "triggers.disabled": {
         "repeat": {
             "sfx": "audio/tick.mp3"
         },
@@ -31,6 +31,12 @@
         },
         {
             "category": "Category 2",
+            "items": [
+                { "title": "Item 1", "imgFile": "placeholder.png" }
+            ]
+        },
+        {
+            "category": "Category 3",
             "items": [
                 { "title": "Item 1", "imgFile": "placeholder.png" }
             ]

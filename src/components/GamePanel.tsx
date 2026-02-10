@@ -1,10 +1,11 @@
 import { useState, useContext, useEffect, useRef } from "react";
 
-import type { GameItemState } from "../types";
-
-import { ThemeContext } from "../context";
+import type { GameItemState, Triggers } from "../types";
+import { GameController } from "../classes/GameController";
 
 import Timer from "./Timer";
+
+import { ThemeContext } from "../context";
 
 import "./GamePanel.scss";
 
@@ -12,79 +13,102 @@ type Props = {
     item: GameItemState | null;
     timer: number;
     delay?: number;
+    triggers: Triggers;
     onReveal: () => void;
     onClose: () => void;
 }
 
-export default function GamePanel({ item, timer, delay = 0, onReveal, onClose }: Props) {
+export default function GamePanel({ item, timer, delay = 0, triggers, onReveal, onClose }: Props) {
     const [imgLoaded, setImgLoaded] = useState<boolean>(false);
     const [showHint, setShowHint] = useState<boolean>(false);
+    const [timeLeft, setTimeLeft] = useState<number>(timer);
     const [timerIsRunning, setTimerIsRunning] = useState<boolean>(false);
     const [timerIsDone, setTimerIsDone] = useState<boolean>(false);
 
     const theme = useContext(ThemeContext);
     const timeoutRef = useRef<number | null>(null);
 
-    function resetPanel() {
+    const resetPanel = () => {
         if (timeoutRef.current !== null) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
         setImgLoaded(false);
         setShowHint(false);
+        setTimeLeft(timer);
         setTimerIsRunning(false);
         setTimerIsDone(false);
-    }
+        gameController?.reset();
+    };
 
-    function handleImgLoad() {
+    const handleImgLoad = () => {
         if (timeoutRef.current !== null) return;
 
         timeoutRef.current = window.setTimeout(() => {
             setImgLoaded(true);
             setTimerIsRunning(true);
+            gameController?.start();
             timeoutRef.current = null;
         }, Math.max(0, delay));
-    }
+    };
 
-    function toggleTimer() {
-        setTimerIsRunning(prev => !prev);
-    }
+    const toggleTimer = () => {
+        if (timerIsRunning) {
+            gameController?.stop();
+            setTimerIsRunning(false);
+        }
+        else {
+            gameController?.start();
+            setTimerIsRunning(true);
+        }
+    };
 
-    function handleTimerFinish() {
-        setTimerIsRunning(false);
-        setTimerIsDone(true);
-    }
-
-    function handleReveal() {
+    const handleReveal = () => {
         setShowHint(false);
         onReveal();
-    }
+    };
 
-    function handleClose() {
+    const handleClose = () => {
         resetPanel();
         onClose();
-    }
+    };
+
+    const onTick = (timeLeft: number) => {
+        setTimeLeft(timeLeft);
+    };
+
+    const onEnd = () => {
+        setTimerIsRunning(false);
+        setTimerIsDone(true);
+    };
+
+    const gameControllerRef = useRef<GameController | null>(null);
+    const gameController = gameControllerRef.current;
 
     useEffect(() => {
+        gameControllerRef.current?.stop();
+        gameControllerRef.current = new GameController(timer, delay, theme, 1000, triggers, { onTick, onEnd });
+
         return () => {
             if (timeoutRef.current !== null) {
                 clearTimeout(timeoutRef.current);
             }
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const canResumeTimer = item?.isRevealed || timerIsDone;
     const showTimer = !(item?.isRevealed || timerIsDone);
 
     return (
-        <dialog className={`game-panel-container ${item && "visible"}`}>
-            {showTimer && <Timer max={timer} isRunning={timerIsRunning} onFinish={handleTimerFinish} />}
+        <dialog className={`game-panel-container ${item ? "visible" : ""}`}>
+            {showTimer && <Timer timeLeft={timeLeft} />}
 
-            <div className={`title-container ${(item?.isRevealed && !showHint) && "visible"}`}>
+            <div className={`title-container ${(item?.isRevealed && !showHint) ? "visible" : ""}`}>
                 <p>{item?.title}</p>
             </div>
 
-            <div className={`hint-container ${showHint && "visible"}`}>
+            <div className={`hint-container ${showHint ? "visible" : ""}`}>
                 <p className="hint">{item?.hint}</p>
             </div>
 

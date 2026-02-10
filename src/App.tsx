@@ -24,31 +24,33 @@ export default function App() {
     theme: APP_DEFAULTS.theme,
     timer: APP_DEFAULTS.timer,
     delay: APP_DEFAULTS.delay,
+    triggers: {}
   });
+  const [configLoaded, setConfigLoaded] = useState<boolean>(false);
   const [loadingText, setLoadingText] = useState<ReactNode | null>(<p>Loading config...</p>);
   const [gameBoard, setGameBoard] = useState<GameCategoryState[]>([]);
   const [selectedItem, setSelectedItem] = useState<{catIdx: number, rowIdx: number} | null>(null);
 
-  function handleTileClick(catIdx: number, rowIdx: number) {
+  const handleTileClick = (catIdx: number, rowIdx: number) => {
     setSelectedItem({catIdx, rowIdx});
-  }
+  };
 
-  function handleReveal() {
+  const handleReveal = () => {
     if (selectedItem && !gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx].isRevealed) {
       setGameBoard(prev => prev.map((cat, c) => ({
         category: cat.category,
         items: cat.items.map((item, r) => ({ ...item, isRevealed: (selectedItem.catIdx == c && selectedItem.rowIdx == r ? true : item.isRevealed) }))
       })));
     }
-  }
+  };
 
-  function handleClosePanel() {
+  const handleClosePanel = () => {
     setSelectedItem(null);
-  }
+  };
 
   useEffect(() => {
     console.log("entered useEffect");
-    fetch("/config.json")
+    fetch(`/config.json?ts=${Date.now()}`)
       .then((res) => {
         if (!res.ok) {
           setLoadingText(<p>Failed to fetch config. Check if config.json exists.</p>);
@@ -60,18 +62,22 @@ export default function App() {
         const {gameBoard, ...rest} = data;
         setConfig(rest);
         if (gameBoard) setGameBoard(setInitialGameBoard(gameBoard));
+        setConfigLoaded(true);
       })
       .catch((err) => setLoadingText(<p>Error loading config: {err.message}</p>));
   }, []);
 
+  const configReady = gameBoard.length > 0 && configLoaded;
+
   return (
     <ThemeContext.Provider value={`/${config.theme}`}>
       <LoadCSS />
-      {gameBoard.length > 0 ?
-        <GameBoard gameBoard={gameBoard} onHandleTileClick={handleTileClick} /> :
-        loadingText
+      {configReady ?
+        <>
+          <GameBoard gameBoard={gameBoard} onHandleTileClick={handleTileClick} />
+          <GamePanel item={selectedItem && gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx]} timer={config.timer} delay={config.delay} triggers={config.triggers} onReveal={handleReveal} onClose={handleClosePanel} />
+        </> : loadingText
       }
-      <GamePanel item={selectedItem && gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx]} timer={config.timer} delay={config.delay} onReveal={handleReveal} onClose={handleClosePanel} />
     </ThemeContext.Provider>
   )
 }

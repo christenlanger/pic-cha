@@ -15,14 +15,14 @@ export interface Trigger {
     addClass?: string;
 }
 
+export type Triggers = Record<string, Trigger | undefined>;
+
 export interface Config {
     theme: string;
     timer: number;
     delay: number;
     bgm?: string;
-    triggers?: {
-        [key: string]: Trigger;
-    };
+    triggers: Triggers;
 }
 
 export type GameItemState = GameItem & {
