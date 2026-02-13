@@ -24,11 +24,11 @@ dist-ssr
 *.sw?
 
 # Ignore default theme contents
-.public/default/*
+public/default/*
 
 # Allow the folder
-!.public/default/
+!public/default/
 
 # Allow the following files inside it
-!.public/default/placeholder.png
-!.public/default/style.css
+!public/default/placeholder.png
+!public/default/style.css
