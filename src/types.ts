@@ -34,4 +34,15 @@ export interface GameCategoryState {
     items: GameItemState[];
 }
 
+export type ConfigData = Config & {
+    gameBoard: GameCategoryState;
+}
+
 export type TimerCallbacks = Record<number, () => void>;
+
+export const StateHelper = {
+    BOARD_STATE: "boardState",
+    BOARD_HASH: "boardHash",
+}
+
+export type StateHelper = (typeof StateHelper)[keyof typeof StateHelper];

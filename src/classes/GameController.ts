@@ -68,7 +68,7 @@ export class GameController {
             if (trigger.bgm == "off") {
                 this.bgmAudio?.pause();
             }
-            else {
+            else if (this.bgmAudio === null) {
                 this.bgmAudio = new Audio(`${this.theme}/${trigger.bgm}`);
                 this.bgmAudio.loop = true;
                 this.bgmAudio.play();
@@ -92,12 +92,14 @@ export class GameController {
 
     stop() {
         if (this.intervalId === null) return;
+
         clearInterval(this.intervalId);
         this.intervalId = null;
     }
 
     reset() {
         this.stop();
+        this.bgmAudio = null;
         this.currentTime = this.timer;
     }
 }

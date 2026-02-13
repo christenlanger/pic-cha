@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
-import type { Config, GameCategory, GameCategoryState } from './types';
+import { StateHelper, type Config, type GameCategory, type GameCategoryState } from './types';
+import { hashString } from './helpers/hashString';
 
 import { ThemeContext } from './context';
 import { APP_DEFAULTS } from './constants/app';
@@ -17,6 +18,23 @@ function setInitialGameBoard(gameBoard: GameCategory[]): GameCategoryState[] {
       category: cat.category,
       items: cat.items.map(item => ({ ...item, isRevealed: false })),
   }));
+}
+
+async function loadBoard(gameBoard: GameCategoryState[]): Promise<GameCategoryState[]> {
+  const serializedDefault = JSON.stringify(gameBoard);
+  const defaultHash = await hashString(serializedDefault);
+
+  const savedBoard = localStorage.getItem(StateHelper.BOARD_STATE);
+  const savedHash = localStorage.getItem(StateHelper.BOARD_HASH);
+
+  if (savedBoard && savedHash === defaultHash) {
+    return JSON.parse(savedBoard);
+  }
+
+  localStorage.setItem(StateHelper.BOARD_STATE, serializedDefault);
+  localStorage.setItem(StateHelper.BOARD_HASH, defaultHash);
+  
+  return gameBoard;
 }
 
 export default function App() {
@@ -37,10 +55,15 @@ export default function App() {
 
   const handleReveal = () => {
     if (selectedItem && !gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx].isRevealed) {
-      setGameBoard(prev => prev.map((cat, c) => ({
-        category: cat.category,
-        items: cat.items.map((item, r) => ({ ...item, isRevealed: (selectedItem.catIdx == c && selectedItem.rowIdx == r ? true : item.isRevealed) }))
-      })));
+      setGameBoard(prev => {
+        const update = prev.map((cat, c) => ({
+          category: cat.category,
+          items: cat.items.map((item, r) => ({ ...item, isRevealed: (selectedItem.catIdx == c && selectedItem.rowIdx == r ? true : item.isRevealed) }))
+        }));
+
+        localStorage.setItem(StateHelper.BOARD_STATE, JSON.stringify(update));
+        return update;
+      });
     }
   };
 
@@ -49,22 +72,43 @@ export default function App() {
   };
 
   useEffect(() => {
-    console.log("entered useEffect");
-    fetch(`/config.json?ts=${Date.now()}`)
-      .then((res) => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.ctrlKey && e.shiftKey && e.key === "X") {
+        localStorage.clear();
+        window.location.reload();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    async function fetchConfig() {
+      try {
+        const res = await fetch(`/config.json?ts=${Date.now()}`);
+
         if (!res.ok) {
-          setLoadingText(<p>Failed to fetch config. Check if config.json exists.</p>);
           throw new Error("Failed to fetch config. Check if config.json exists.");
         }
-        return res.json();
-      })
-      .then((data) => {
+
+        const data = await res.json();
         const {gameBoard, ...rest} = data;
+        const defaultBoard = setInitialGameBoard(gameBoard);
+        const loadedBoard = await loadBoard(defaultBoard);
+
+        if (gameBoard) setGameBoard(loadedBoard);
         setConfig(rest);
-        if (gameBoard) setGameBoard(setInitialGameBoard(gameBoard));
         setConfigLoaded(true);
-      })
-      .catch((err) => setLoadingText(<p>Error loading config: {err.message}</p>));
+      }
+      catch (err) {
+        console.error(err);
+        setLoadingText(<p>Failed to fetch config. Check if config.json exists.</p>)
+      }
+    }
+
+    fetchConfig();
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const configReady = gameBoard.length > 0 && configLoaded;

@@ -47,7 +47,7 @@ export default function GamePanel({ item, timer, delay = 0, triggers, onReveal, 
         timeoutRef.current = window.setTimeout(() => {
             setImgLoaded(true);
             setTimerIsRunning(true);
-            gameController?.start();
+            if (!item?.isRevealed) gameController?.start();
             timeoutRef.current = null;
         }, Math.max(0, delay));
     };
