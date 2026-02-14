@@ -17,12 +17,19 @@ export interface Trigger {
 
 export type Triggers = Record<string, Trigger | undefined>;
 
+export interface Difficulty {
+    default: string;
+    list: string[];
+}
+
 export interface Config {
     theme: string;
     timer: number;
     delay: number;
     bgm?: string;
+    loadingText?: string;
     triggers: Triggers;
+    difficulty: Difficulty;
 }
 
 export type GameItemState = GameItem & {

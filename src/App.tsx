@@ -42,7 +42,11 @@ export default function App() {
     theme: APP_DEFAULTS.theme,
     timer: APP_DEFAULTS.timer,
     delay: APP_DEFAULTS.delay,
-    triggers: {}
+    triggers: {},
+    difficulty: {
+      default: "",
+      list: []
+    }
   });
   const [configLoaded, setConfigLoaded] = useState<boolean>(false);
   const [loadingText, setLoadingText] = useState<ReactNode | null>(<p>Loading config...</p>);
@@ -118,8 +122,18 @@ export default function App() {
       <LoadCSS />
       {configReady ?
         <>
-          <GameBoard gameBoard={gameBoard} onHandleTileClick={handleTileClick} />
-          <GamePanel item={selectedItem && gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx]} timer={config.timer} delay={config.delay} triggers={config.triggers} onReveal={handleReveal} onClose={handleClosePanel} />
+          <GameBoard
+            gameBoard={gameBoard}
+            difficulty={config.difficulty}
+            onHandleTileClick={handleTileClick} />
+          <GamePanel
+            item={selectedItem && gameBoard[selectedItem.catIdx].items[selectedItem.rowIdx]}
+            timer={config.timer}
+            delay={config.delay}
+            triggers={config.triggers}
+            loadingText={config.loadingText}
+            onReveal={handleReveal}
+            onClose={handleClosePanel} />
         </> : loadingText
       }
     </ThemeContext.Provider>

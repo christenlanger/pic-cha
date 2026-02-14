@@ -1,9 +1,10 @@
 {
     "theme": "default",
-    "timer": 5,
-    "delay": 0,
+    "timer": 15,
+    "delay": 2,
     "bgm": "audio/folk.mp3",
-    "triggers": {
+    "loadingText": "READY",
+    "triggers.disabled": {
         "start": {
             "bgm": "audio/qloop.mp3"
         },
@@ -12,24 +13,65 @@
             "sfx": "audio/timesup.mp3"
         }
     },
+    "difficulty": {
+        "default": "Extra Stage",
+        "list": [
+            "Almost Weak",
+            "Narwhal",
+            "Mastah",
+            "Apocalyptic",
+            "Pandemic"
+        ]
+    },
     "gameBoard": [
         {
-            "category": "Category 1",
+            "category": "House Hut",
             "items": [
-                { "title": "Title 1", "imgFile": "placeholder.png" },
-                { "title": "Title 2", "imgFile": "placeholder.png" }
+                { "title": "Winter Melon (Kundol)", "imgFile": "images/hh-wintermelon.png" },
+                { "title": "Lima Beans (Patani)", "imgFile": "images/hh-limabeans.png" },
+                { "title": "Ginger (Luya)", "imgFile": "images/hh-ginger.png" },
+                { "title": "Tomato (Kamatis)", "imgFile": "images/hh-tomato.png" },
+                { "title": "Pumpking (Kalabasa)", "imgFile": "images/hh-pumpkin.png" }
             ]
         },
         {
-            "category": "Category 2",
+            "category": "Longganisa",
             "items": [
-                { "title": "Item 1", "imgFile": "placeholder.png" }
+                { "title": "Hamonado", "imgFile": "images/longganisa-hamonado.png" },
+                { "title": "Vigan", "imgFile": "images/longganisa-vigan.png" },
+                { "title": "Lucban Longganisa", "imgFile": "images/longganisa-lucban.png" },
+                { "title": "Chorizo de Cebu", "imgFile": "images/longganisa-chorizodecebu.png" },
+                { "title": "Longganisa de Guinobatan", "imgFile": "images/longganisa-guinobatan.png" }
             ]
         },
         {
-            "category": "Category 3",
+            "category": "Longganisa",
             "items": [
-                { "title": "Entry 1", "imgFile": "placeholder.png" }
+                { "title": "Hamonado", "imgFile": "images/longganisa-hamonado.png" },
+                { "title": "Vigan", "imgFile": "images/longganisa-vigan.png" },
+                { "title": "Lucban Longganisa", "imgFile": "images/longganisa-lucban.png" },
+                { "title": "Chorizo de Cebu", "imgFile": "images/longganisa-chorizodecebu.png" },
+                { "title": "Longganisa de Guinobatan", "imgFile": "images/longganisa-guinobatan.png" }
+            ]
+        },
+        {
+            "category": "Nangangamatis",
+            "items": [
+                { "title": "Afritada", "imgFile": "images/tomato-afritada.png" },
+                { "title": "Mechado", "imgFile": "images/tomato-mechado.png" },
+                { "title": "Menudo", "imgFile": "images/tomato-menudo.png" },
+                { "title": "Giniling", "imgFile": "images/tomato-giniling.png" },
+                { "title": "Picadillo", "imgFile": "images/tomato-picadillo.png" }
+            ]
+        },
+        {
+            "category": "Larong Kanto",
+            "items": [
+                { "title": "Agawan Base", "imgFile": "images/games-agawanbase.png" },
+                { "title": "Langit-Lupa", "imgFile": "images/games-langitlupa.png" },
+                { "title": "Tumbang Preso", "imgFile": "images/games-tumbangpreso.png" },
+                { "title": "Piko", "imgFile": "images/games-piko.png" },
+                { "title": "Shatong", "imgFile": "images/games-shatong.png" }
             ]
         }
     ]

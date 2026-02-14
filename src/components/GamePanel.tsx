@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 import type { GameItemState, Triggers } from "../types";
 import { GameController } from "../classes/GameController";
@@ -14,11 +15,12 @@ type Props = {
     timer: number;
     delay?: number;
     triggers: Triggers;
+    loadingText?: string;
     onReveal: () => void;
     onClose: () => void;
 }
 
-export default function GamePanel({ item, timer, delay = 0, triggers, onReveal, onClose }: Props) {
+export default function GamePanel({ item, timer, delay = 0, triggers, loadingText = "Loading...", onReveal, onClose }: Props) {
     const [imgLoaded, setImgLoaded] = useState<boolean>(false);
     const [showHint, setShowHint] = useState<boolean>(false);
     const [timeLeft, setTimeLeft] = useState<number>(timer);
@@ -49,7 +51,7 @@ export default function GamePanel({ item, timer, delay = 0, triggers, onReveal, 
             setTimerIsRunning(true);
             if (!item?.isRevealed) gameController?.start();
             timeoutRef.current = null;
-        }, Math.max(0, delay));
+        }, Math.max(0, delay * 1000));
     };
 
     const toggleTimer = () => {
@@ -100,7 +102,7 @@ export default function GamePanel({ item, timer, delay = 0, triggers, onReveal, 
     const canResumeTimer = item?.isRevealed || timerIsDone;
     const showTimer = !(item?.isRevealed || timerIsDone);
 
-    return (
+    return createPortal(
         <dialog className={`game-panel-container ${item ? "visible" : ""}`}>
             {showTimer && <Timer timeLeft={timeLeft} />}
 
@@ -114,7 +116,7 @@ export default function GamePanel({ item, timer, delay = 0, triggers, onReveal, 
 
             <div className="img-container">
                 <img src={`${theme}/${item?.imgFile}`} onLoad={handleImgLoad} style={{ display: imgLoaded ? "inline" : "none" }} />
-                {!imgLoaded && <p>Loading...</p>}
+                {!imgLoaded && <p>{loadingText}</p>}
             </div>
 
             <menu className="menu-container">
@@ -123,6 +125,7 @@ export default function GamePanel({ item, timer, delay = 0, triggers, onReveal, 
                 {showTimer && <li><button onClick={toggleTimer} disabled={canResumeTimer}>{timerIsRunning ? "Pause" : "Resume"} Timer</button></li>}
                 <li><button onClick={handleClose}>Close</button></li>
             </menu>
-        </dialog>
+        </dialog>,
+        document.getElementById("modal-root")!
     );
 }

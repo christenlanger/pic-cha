@@ -99,6 +99,7 @@ export class GameController {
 
     reset() {
         this.stop();
+        this.bgmAudio?.pause();
         this.bgmAudio = null;
         this.currentTime = this.timer;
     }

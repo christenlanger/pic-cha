@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { GameCategoryState } from "../types";
+import type { Difficulty, GameCategoryState } from "../types";
 
 import ItemTile from "./ItemTile";
 
@@ -8,10 +8,11 @@ import "./GameBoard.scss";
 
 type Props = {
     gameBoard: GameCategoryState[];
+    difficulty: Difficulty;
     onHandleTileClick: (catIdx: number, rowIdx: number) => void;
 }
 
-export default function GameBoard({ gameBoard, onHandleTileClick }: Props) {
+export default function GameBoard({ gameBoard, difficulty, onHandleTileClick }: Props) {
     const maxItems: number = Math.max(0, ...gameBoard.map(cat => cat.items.length));
 
     return (
@@ -20,13 +21,13 @@ export default function GameBoard({ gameBoard, onHandleTileClick }: Props) {
           {/* Categories */}
           <li></li>
           {gameBoard.map((cat, catIdx) => (
-            <li key={`cat-${catIdx}`}>{cat.category}</li>
+            <li key={`cat-${catIdx}`} className="category-name">{cat.category}</li>
           ))}
 
           {/* Items */}
           {Array.from({ length: maxItems }).map((_, rowIdx) => (
             <React.Fragment key={`row-${rowIdx}`}>
-              <li>Difficulty {rowIdx + 1}</li>
+              <li className="difficulty-name">{rowIdx < difficulty.list.length ? difficulty.list[rowIdx] : difficulty.default}</li>
               {gameBoard.map((cat, catIdx) => (
                 <li key={`item-${catIdx}-${rowIdx}`}>
                     {cat.items[rowIdx] && <ItemTile item={cat.items[rowIdx]} onClick={() => onHandleTileClick(catIdx, rowIdx)} />}

@@ -1,3 +1,54 @@
-body {
+.item-bg-revealed {
+    background-color: transparent;
+    padding: 0;
+    overflow: hidden;
+}
+
+.item-bg-random {
+    --hue: calc(var(--rand) * 360);
+    background-color: hsl(var(--hue), 50%, 50%);
+    padding: 0;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: hsl(var(--hue), 70%, 60%);
+    }
+}
+
+.game-panel-container {
+    max-width: 90dvw;
+    max-height: 90dvh;
+    bottom: 0;
     
+    &.visible {
+        animation: slide-up 0.5s ease-in-out forwards;
+    }
+}
+
+@keyframes slide-up {
+    0% {
+        translate: 0 2rem;
+        opacity: 0;
+    }
+    100% {
+        translate: 0;
+        opacity: 1;
+    }
+}
+
+.title-container {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.img-container {
+    width: 100%;
+
+    img {
+        height: 100%;
+    }
+
+    p {
+        font-size: 10rem;
+        font-weight: bold;
+    }
 }

@@ -3,7 +3,6 @@
   --color-borders: 100, 108, 255;
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
@@ -72,6 +71,10 @@ button:focus-visible {
 
 button:disabled {
   color: rgb(var(--color-borders));
+}
+
+#modal-root {
+  z-index: 9999;
 }
 
 @media (prefers-color-scheme: light) {
