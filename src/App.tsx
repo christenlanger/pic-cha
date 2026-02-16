@@ -48,7 +48,7 @@ export default function App() {
       list: []
     }
   });
-  const [configLoaded, setConfigLoaded] = useState<boolean>(false);
+  const [configLoaded, setConfigLoaded] = useState(false);
   const [loadingText, setLoadingText] = useState<ReactNode | null>(<p>Loading config...</p>);
   const [gameBoard, setGameBoard] = useState<GameCategoryState[]>([]);
   const [selectedItem, setSelectedItem] = useState<{catIdx: number, rowIdx: number} | null>(null);

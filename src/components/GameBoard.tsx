@@ -13,7 +13,7 @@ type Props = {
 }
 
 export default function GameBoard({ gameBoard, difficulty, onHandleTileClick }: Props) {
-    const maxItems: number = Math.max(0, ...gameBoard.map(cat => cat.items.length));
+    const maxItems = Math.max(0, ...gameBoard.map(cat => cat.items.length));
 
     return (
       <main className="gameboard-container">

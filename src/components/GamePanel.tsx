@@ -21,11 +21,11 @@ type Props = {
 }
 
 export default function GamePanel({ item, timer, delay = 0, triggers, loadingText = "Loading...", onReveal, onClose }: Props) {
-    const [imgLoaded, setImgLoaded] = useState<boolean>(false);
-    const [showHint, setShowHint] = useState<boolean>(false);
-    const [timeLeft, setTimeLeft] = useState<number>(timer);
-    const [timerIsRunning, setTimerIsRunning] = useState<boolean>(false);
-    const [timerIsDone, setTimerIsDone] = useState<boolean>(false);
+    const [imgLoaded, setImgLoaded] = useState(false);
+    const [showHint, setShowHint] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(timer);
+    const [timerIsRunning, setTimerIsRunning] = useState(false);
+    const [timerIsDone, setTimerIsDone] = useState(false);
 
     const theme = useContext(ThemeContext);
     const timeoutRef = useRef<number | null>(null);
@@ -51,7 +51,7 @@ export default function GamePanel({ item, timer, delay = 0, triggers, loadingTex
             setTimerIsRunning(true);
             if (!item?.isRevealed) gameController?.start();
             timeoutRef.current = null;
-        }, Math.max(0, delay * 1000));
+        }, item?.isRevealed ? 0 : Math.max(0, delay * 1000));
     };
 
     const toggleTimer = () => {
