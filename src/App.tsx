@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import type { ReactNode } from 'react';
+import { useState, useReducer, useEffect } from 'react';
 
 import { StateHelper, type Config, type GameCategory, type GameCategoryState } from './types';
 import { hashString } from './helpers/hashString';
@@ -37,8 +36,14 @@ async function loadBoard(gameBoard: GameCategoryState[]): Promise<GameCategorySt
   return gameBoard;
 }
 
-export default function App() {
-  const [config, setConfig] = useState<Config>({
+type ConfigState = {
+  status: "loading" | "loaded" | "error";
+  config: Config;
+}
+
+const initialConfig: ConfigState = {
+  status: "loading",
+  config: {
     theme: APP_DEFAULTS.theme,
     timer: APP_DEFAULTS.timer,
     delay: APP_DEFAULTS.delay,
@@ -47,9 +52,34 @@ export default function App() {
       default: "",
       list: []
     }
-  });
-  const [configLoaded, setConfigLoaded] = useState(false);
-  const [loadingText, setLoadingText] = useState<ReactNode | null>(<p>Loading config...</p>);
+  }
+}
+
+type ConfigAction =
+  | { type: "LOAD_CONFIG", data: Config }
+  | { type: "SET_ERROR" }
+
+function configReducer(state: ConfigState, action: ConfigAction): ConfigState {
+  switch (action.type) {
+    case "LOAD_CONFIG":
+      return {
+        ...state,
+        status: "loaded",
+        config: action.data,
+      }
+    case "SET_ERROR":
+      return {
+        ...state,
+        status: "error"
+      }
+    default:
+      return state;
+  }
+}
+
+export default function App() {
+  const [configState, configDispatch] = useReducer(configReducer, initialConfig);
+
   const [gameBoard, setGameBoard] = useState<GameCategoryState[]>([]);
   const [selectedItem, setSelectedItem] = useState<{catIdx: number, rowIdx: number} | null>(null);
 
@@ -97,14 +127,13 @@ export default function App() {
         const {gameBoard, ...rest} = data;
         const defaultBoard = setInitialGameBoard(gameBoard);
         const loadedBoard = await loadBoard(defaultBoard);
-
         if (gameBoard) setGameBoard(loadedBoard);
-        setConfig(rest);
-        setConfigLoaded(true);
+
+        configDispatch({ type: "LOAD_CONFIG", data: rest });
       }
       catch (err) {
         console.error(err);
-        setLoadingText(<p>Failed to fetch config. Check if config.json exists.</p>)
+        configDispatch({ type: "SET_ERROR" });
       }
     }
 
@@ -115,7 +144,13 @@ export default function App() {
     };
   }, []);
 
-  const configReady = gameBoard.length > 0 && configLoaded;
+  const { config, status } = configState;
+  const configReady = gameBoard.length > 0 && status === "loaded";
+  const loadingTextOutput: Record<ConfigState["status"], React.ReactNode | null> = {
+    loading: <p>Loading config...</p>,
+    loaded: null,
+    error: <p>Failed to fetch config. Check if config.json exists.</p>,
+  }
 
   return (
     <ThemeContext.Provider value={`/${config.theme}`}>
@@ -134,7 +169,8 @@ export default function App() {
             loadingText={config.loadingText}
             onReveal={handleReveal}
             onClose={handleClosePanel} />
-        </> : loadingText
+        </> :
+        loadingTextOutput[status]
       }
     </ThemeContext.Provider>
   )

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useReducer, useContext, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import type { GameItemState, Triggers } from "../types";
@@ -20,12 +20,51 @@ type Props = {
     onClose: () => void;
 }
 
+type TimerState = {
+    timeLeft: number;
+    timerIsRunning: boolean;
+    timerIsDone: boolean;
+}
+
+type TimerAction =
+    | { type: "setRunning", running: boolean }
+    | { type: "setDone" }
+    | { type: "tick", timeLeft: number }
+    | { type: "reset", timeLeft: number }
+
+function timerReducer(state: TimerState, action: TimerAction): TimerState {
+    switch (action.type) {
+        case "setRunning":
+            return {
+                ...state,
+                timerIsRunning: action.running,
+            }
+        case "setDone":
+            return {
+                ...state,
+                timerIsRunning: false,
+                timerIsDone: true,
+            }
+        case "tick":
+            return {
+                ...state,
+                timeLeft: action.timeLeft,
+            }
+        case "reset":
+            return {
+                timeLeft: action.timeLeft,
+                timerIsRunning: false,
+                timerIsDone: false,
+            }
+        default:
+            return state;
+    }
+}
+
 export default function GamePanel({ item, timer, delay = 0, triggers, loadingText = "Loading...", onReveal, onClose }: Props) {
     const [imgLoaded, setImgLoaded] = useState(false);
     const [showHint, setShowHint] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(timer);
-    const [timerIsRunning, setTimerIsRunning] = useState(false);
-    const [timerIsDone, setTimerIsDone] = useState(false);
+    const [timerState, timerDispatch] = useReducer(timerReducer, { timeLeft: timer, timerIsRunning: false, timerIsDone: false });
 
     const theme = useContext(ThemeContext);
     const timeoutRef = useRef<number | null>(null);
@@ -37,9 +76,7 @@ export default function GamePanel({ item, timer, delay = 0, triggers, loadingTex
         }
         setImgLoaded(false);
         setShowHint(false);
-        setTimeLeft(timer);
-        setTimerIsRunning(false);
-        setTimerIsDone(false);
+        timerDispatch({ type: "reset", timeLeft: timer });
         gameController?.reset();
     };
 
@@ -48,20 +85,20 @@ export default function GamePanel({ item, timer, delay = 0, triggers, loadingTex
 
         timeoutRef.current = window.setTimeout(() => {
             setImgLoaded(true);
-            setTimerIsRunning(true);
+            timerDispatch({ type: "setRunning", running: true });
             if (!item?.isRevealed) gameController?.start();
             timeoutRef.current = null;
         }, item?.isRevealed ? 0 : Math.max(0, delay * 1000));
     };
 
     const toggleTimer = () => {
-        if (timerIsRunning) {
+        if (timerState.timerIsRunning) {
             gameController?.stop();
-            setTimerIsRunning(false);
+            timerDispatch({ type: "setRunning", running: false });
         }
         else {
             gameController?.start();
-            setTimerIsRunning(true);
+            timerDispatch({ type: "setRunning", running: true });
         }
     };
 
@@ -76,12 +113,11 @@ export default function GamePanel({ item, timer, delay = 0, triggers, loadingTex
     };
 
     const onTick = (timeLeft: number) => {
-        setTimeLeft(timeLeft);
+        timerDispatch({ type: "tick", timeLeft: timeLeft });
     };
 
     const onEnd = () => {
-        setTimerIsRunning(false);
-        setTimerIsDone(true);
+        timerDispatch({ type: "setDone" });
     };
 
     const gameControllerRef = useRef<GameController | null>(null);
@@ -99,12 +135,12 @@ export default function GamePanel({ item, timer, delay = 0, triggers, loadingTex
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const canResumeTimer = item?.isRevealed || timerIsDone;
-    const showTimer = !(item?.isRevealed || timerIsDone);
+    const canResumeTimer = item?.isRevealed || timerState.timerIsDone;
+    const showTimer = !(item?.isRevealed || timerState.timerIsDone);
 
     return createPortal(
         <dialog className={`game-panel-container ${item ? "visible" : ""}`}>
-            {showTimer && <Timer timeLeft={timeLeft} />}
+            {showTimer && <Timer timeLeft={timerState.timeLeft} />}
 
             <div className={`title-container ${(item?.isRevealed && !showHint) ? "visible" : ""}`}>
                 <p>{item?.title}</p>
@@ -121,8 +157,8 @@ export default function GamePanel({ item, timer, delay = 0, triggers, loadingTex
 
             <menu className="menu-container">
                 {item?.hint && <li><button onClick={() => {setShowHint(prev => !prev)}}>Toggle Hint</button></li>}
-                {!item?.isRevealed && <li><button onClick={handleReveal} disabled={timerIsRunning}>Reveal</button></li>}
-                {showTimer && <li><button onClick={toggleTimer} disabled={canResumeTimer}>{timerIsRunning ? "Pause" : "Resume"} Timer</button></li>}
+                {!item?.isRevealed && <li><button onClick={handleReveal} disabled={timerState.timerIsRunning}>Reveal</button></li>}
+                {showTimer && <li><button onClick={toggleTimer} disabled={canResumeTimer}>{timerState.timerIsRunning ? "Pause" : "Resume"} Timer</button></li>}
                 <li><button onClick={handleClose}>Close</button></li>
             </menu>
         </dialog>,
