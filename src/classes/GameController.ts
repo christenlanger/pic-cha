@@ -1,4 +1,4 @@
-import type { Triggers } from "../types";
+import type { Triggers } from "@/shared/types";
 
 type GameControllerCallbacks = {
     onTick?: (timeLeft: number) => void;    // called every second

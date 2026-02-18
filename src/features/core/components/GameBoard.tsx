@@ -1,18 +1,19 @@
-import React from 'react';
+import { Fragment } from 'react';
 
-import type { Difficulty, GameCategoryState } from "../types";
+import { useConfig } from '@/features/config/useConfig';
+import { useGameBoard } from '@/features/gameboard/useGameBoard';
 
-import ItemTile from "./ItemTile";
+import ItemTile from './ItemTile';
 
 import "./GameBoard.scss";
 
-type Props = {
-    gameBoard: GameCategoryState[];
-    difficulty: Difficulty;
-    onHandleTileClick: (catIdx: number, rowIdx: number) => void;
-}
+export default function GameBoard() {
+    const { config } = useConfig();
+    const { difficulty } = config;
+    const { gameBoard, selectTile } = useGameBoard();
 
-export default function GameBoard({ gameBoard, difficulty, onHandleTileClick }: Props) {
+    if (!gameBoard) return;
+
     const maxItems = Math.max(0, ...gameBoard.map(cat => cat.items.length));
 
     return (
@@ -26,14 +27,14 @@ export default function GameBoard({ gameBoard, difficulty, onHandleTileClick }: 
 
           {/* Items */}
           {Array.from({ length: maxItems }).map((_, rowIdx) => (
-            <React.Fragment key={`row-${rowIdx}`}>
+            <Fragment key={`row-${rowIdx}`}>
               <li className="difficulty-name">{rowIdx < difficulty.list.length ? difficulty.list[rowIdx] : difficulty.default}</li>
               {gameBoard.map((cat, catIdx) => (
                 <li key={`item-${catIdx}-${rowIdx}`}>
-                    {cat.items[rowIdx] && <ItemTile item={cat.items[rowIdx]} onClick={() => onHandleTileClick(catIdx, rowIdx)} />}
+                    {cat.items[rowIdx] && <ItemTile item={cat.items[rowIdx]} onClick={() => selectTile(catIdx, rowIdx)} />}
                 </li>
               ))}
-            </React.Fragment>
+            </Fragment>
           ))}
         </ul>
       </main>

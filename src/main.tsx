@@ -2,9 +2,12 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import ConfigProvider from './features/config/ConfigProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ConfigProvider srcFile='/config.json'>
+      <App />
+    </ConfigProvider>
   </StrictMode>,
 )
