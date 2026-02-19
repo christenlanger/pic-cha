@@ -2,22 +2,22 @@ import { useEffect } from "react";
 import { useConfig } from "@/features/config/useConfig";
 
 const LoadCSS = () => {
-    const { config } = useConfig();
+  const { config } = useConfig();
 
-    useEffect(() => {
-        const link = document.createElement("link");
+  useEffect(() => {
+    const link = document.createElement("link");
 
-        link.rel = "stylesheet";
-        link.href = `/${config.theme}/style.css`;
-        link.id = "theme-css";
-        document.head.appendChild(link);
+    link.rel = "stylesheet";
+    link.href = `/${config.theme}/style.css`;
+    link.id = "theme-css";
+    document.head.appendChild(link);
 
-        return () => {
-            document.getElementById("theme-css")?.remove();
-        };
-    }, [config]);
+    return () => {
+      document.getElementById("theme-css")?.remove();
+    };
+  }, [config]);
 
-    return null;
-}
+  return null;
+};
 
 export default LoadCSS;

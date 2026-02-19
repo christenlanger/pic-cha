@@ -1,13 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import ConfigProvider from './features/config/ConfigProvider.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import ConfigProvider from "./features/config/ConfigProvider.tsx";
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ConfigProvider srcFile='/config.json'>
+    <ConfigProvider srcFile="/config.json">
       <App />
     </ConfigProvider>
   </StrictMode>,
-)
+);

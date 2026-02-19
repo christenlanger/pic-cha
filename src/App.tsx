@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
-import { useConfig } from './features/config/useConfig';
+import { useEffect } from "react";
+import { useConfig } from "./features/config/useConfig";
 
-import type { ConfigContextValue } from './features/config/ConfigContext';
+import type { ConfigContextValue } from "./features/config/ConfigContext";
 
-import GameBoardProvider from './features/gameboard/GameBoardProvider';
+import GameBoardProvider from "./features/gameboard/GameBoardProvider";
 
-import LoadCSS from './features/core/components/LoadCSS';
-import GameBoard from './features/core/components/GameBoard';
-import GamePanel from './features/core/components/GamePanel';
+import LoadCSS from "./features/core/components/LoadCSS";
+import GameBoard from "./features/gameboard/components/GameBoard";
+import GamePanel from "./features/core/components/GamePanel";
 
-import './App.css';
+import "./App.css";
 
 export default function App() {
   const configState: ConfigContextValue = useConfig();
@@ -35,18 +35,19 @@ export default function App() {
     loading: <p>Loading config...</p>,
     loaded: null,
     error: <p>Failed to fetch config. Check if config.json exists.</p>,
-  }
+  };
 
-    return (
+  return (
     <>
       <LoadCSS />
-      { configReady ?
+      {configReady ? (
         <GameBoardProvider initialGameBoard={gameBoard}>
           <GameBoard />
           <GamePanel />
         </GameBoardProvider>
-        : loadingTextOutput[status]
-      }
+      ) : (
+        loadingTextOutput[status]
+      )}
     </>
-  )
+  );
 }

@@ -1,78 +1,103 @@
 {
-    "theme": "default",
-    "timer": 15,
-    "delay": 2,
-    "bgm": "audio/folk.mp3",
-    "loadingText": "READY",
-    "triggers.disabled": {
-        "start": {
-            "bgm": "audio/qloop.mp3"
-        },
-        "end": {
-            "bgm": "off",
-            "sfx": "audio/timesup.mp3"
-        }
+  "theme": "default",
+  "timer": 30,
+  "delay": 2,
+  "bgm": "audio/06 backyard of eden.mp3",
+  "loadingText": "READY",
+  "answer": "answer",
+  "triggers": {
+    "start": {
+      "bgm": "audio/104 Fate Updated.mp3"
     },
-    "difficulty": {
-        "default": "Extra Stage",
-        "list": [
-            "Almost Weak",
-            "Narwhal",
-            "Mastah",
-            "Apocalyptic",
-            "Pandemic"
-        ]
+    "15": {
+      "bgm": "audio/204 Fate Updated ~VARIATION.mp3"
     },
-    "gameBoard": [
+    "end": {
+      "bgm": "off",
+      "sfx": "audio/timesup.mp3"
+    }
+  },
+  "difficulty": {
+    "default": "Extra Stage",
+    "list": ["Almost Weak", "Narwhal", "Mastah", "Apocalyptic", "Pandemic"]
+  },
+  "gameBoard": [
+    {
+      "category": "House Hut",
+      "items": [
         {
-            "category": "House Hut",
-            "items": [
-                { "title": "Winter Melon (Kundol)", "imgFile": "images/hh-wintermelon.png" },
-                { "title": "Lima Beans (Patani)", "imgFile": "images/hh-limabeans.png" },
-                { "title": "Ginger (Luya)", "imgFile": "images/hh-ginger.png" },
-                { "title": "Tomato (Kamatis)", "imgFile": "images/hh-tomato.png" },
-                { "title": "Pumpking (Kalabasa)", "imgFile": "images/hh-pumpkin.png" }
-            ]
+          "title": "Winter Melon (Kundol)",
+          "imgFile": "images/hh-wintermelon.png"
         },
         {
-            "category": "Longganisa",
-            "items": [
-                { "title": "Hamonado", "imgFile": "images/longganisa-hamonado.png" },
-                { "title": "Vigan", "imgFile": "images/longganisa-vigan.png" },
-                { "title": "Lucban Longganisa", "imgFile": "images/longganisa-lucban.png" },
-                { "title": "Chorizo de Cebu", "imgFile": "images/longganisa-chorizodecebu.png" },
-                { "title": "Longganisa de Guinobatan", "imgFile": "images/longganisa-guinobatan.png" }
-            ]
+          "title": "Lima Beans (Patani)",
+          "imgFile": "images/hh-limabeans.png"
+        },
+        { "title": "Ginger (Luya)", "imgFile": "images/hh-ginger.png" },
+        { "title": "Tomato (Kamatis)", "imgFile": "images/hh-tomato.png" },
+        { "title": "Pumpking (Kalabasa)", "imgFile": "images/hh-pumpkin.png" }
+      ]
+    },
+    {
+      "category": "Longganisa",
+      "items": [
+        { "title": "Hamonado", "imgFile": "images/longganisa-hamonado.png" },
+        { "title": "Vigan", "imgFile": "images/longganisa-vigan.png" },
+        {
+          "title": "Lucban Longganisa",
+          "imgFile": "images/longganisa-lucban.png"
         },
         {
-            "category": "Longganisa",
-            "items": [
-                { "title": "Hamonado", "imgFile": "images/longganisa-hamonado.png" },
-                { "title": "Vigan", "imgFile": "images/longganisa-vigan.png" },
-                { "title": "Lucban Longganisa", "imgFile": "images/longganisa-lucban.png" },
-                { "title": "Chorizo de Cebu", "imgFile": "images/longganisa-chorizodecebu.png" },
-                { "title": "Longganisa de Guinobatan", "imgFile": "images/longganisa-guinobatan.png" }
-            ]
+          "title": "Chorizo de Cebu",
+          "imgFile": "images/longganisa-chorizodecebu.png"
         },
         {
-            "category": "Nangangamatis",
-            "items": [
-                { "title": "Afritada", "imgFile": "images/tomato-afritada.png" },
-                { "title": "Mechado", "imgFile": "images/tomato-mechado.png" },
-                { "title": "Menudo", "imgFile": "images/tomato-menudo.png" },
-                { "title": "Giniling", "imgFile": "images/tomato-giniling.png" },
-                { "title": "Picadillo", "imgFile": "images/tomato-picadillo.png" }
-            ]
-        },
-        {
-            "category": "Larong Kanto",
-            "items": [
-                { "title": "Agawan Base", "imgFile": "images/games-agawanbase.png" },
-                { "title": "Langit-Lupa", "imgFile": "images/games-langitlupa.png" },
-                { "title": "Tumbang Preso", "imgFile": "images/games-tumbangpreso.png" },
-                { "title": "Piko", "imgFile": "images/games-piko.png" },
-                { "title": "Shatong", "imgFile": "images/games-shatong.png" }
-            ]
+          "title": "Longganisa de Guinobatan",
+          "imgFile": "images/longganisa-guinobatan.png"
         }
-    ]
+      ]
+    },
+    {
+      "category": "Longganisa",
+      "items": [
+        { "title": "Hamonado", "imgFile": "images/longganisa-hamonado.png" },
+        { "title": "Vigan", "imgFile": "images/longganisa-vigan.png" },
+        {
+          "title": "Lucban Longganisa",
+          "imgFile": "images/longganisa-lucban.png"
+        },
+        {
+          "title": "Chorizo de Cebu",
+          "imgFile": "images/longganisa-chorizodecebu.png"
+        },
+        {
+          "title": "Longganisa de Guinobatan",
+          "imgFile": "images/longganisa-guinobatan.png"
+        }
+      ]
+    },
+    {
+      "category": "Nangangamatis",
+      "items": [
+        { "title": "Afritada", "imgFile": "images/tomato-afritada.png" },
+        { "title": "Mechado", "imgFile": "images/tomato-mechado.png" },
+        { "title": "Menudo", "imgFile": "images/tomato-menudo.png" },
+        { "title": "Giniling", "imgFile": "images/tomato-giniling.png" },
+        { "title": "Picadillo", "imgFile": "images/tomato-picadillo.png" }
+      ]
+    },
+    {
+      "category": "Larong Kanto",
+      "items": [
+        { "title": "Agawan Base", "imgFile": "images/games-agawanbase.png" },
+        { "title": "Langit-Lupa", "imgFile": "images/games-langitlupa.png" },
+        {
+          "title": "Tumbang Preso",
+          "imgFile": "images/games-tumbangpreso.png"
+        },
+        { "title": "Piko", "imgFile": "images/games-piko.png" },
+        { "title": "Shatong", "imgFile": "images/games-shatong.png" }
+      ]
+    }
+  ]
 }
