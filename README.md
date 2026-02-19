@@ -8,9 +8,11 @@ As of now the app has basic functionality. Triggers will be added in the next up
 
 Run the app:
 
-1. git clone https://github.com/christenlanger/pic-cha.git
-2. cd pic-cha
-3. npm install
-4. npm run dev
+```console
+git clone https://github.com/christenlanger/pic-cha.git
+cd pic-cha
+npm install
+npm run dev
+```
 
 First release will be when the app is feature-complete.
